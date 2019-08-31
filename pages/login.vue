@@ -6,8 +6,8 @@
     </div>
     <div v-else>
       <form @submit.prevent="login">
-        <input type="text" placeholder="email" v-model="email">
-        <input type="text" placeholder="password" v-model="password">
+        <input v-model="email" type="text" placeholder="email" />
+        <input v-model="password" type="text" placeholder="password" />
 
         <button>ログイン</button>
       </form>
@@ -15,8 +15,8 @@
   </main>
 </template>
 <script>
-import firebase from '~/plugins/firebase.ts'
 import { mapActions, mapState, mapGetters } from 'vuex'
+import firebase from '~/plugins/firebase.ts'
 
 export default {
   data() {
@@ -30,25 +30,29 @@ export default {
     ...mapGetters('auth', ['isAuthenticated'])
   },
   mounted() {
-    firebase.auth().onAuthStateChanged(user => {
+    firebase.auth().onAuthStateChanged((user) => {
       this.setUser(user)
     })
   },
   methods: {
     ...mapActions('auth', ['setUser']),
     login() {
-      firebase.auth().signInWithEmailAndPassword(this.email, this.password)
-        .then(usre => {
-
-        }).catch(err => {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(this.email, this.password)
+        .then((usre) => {})
+        .catch((err) => {
           console.error(err)
         })
     },
     logout() {
-      firebase.auth().signOut()
+      firebase
+        .auth()
+        .signOut()
         .then(() => {
           this.setUser(null)
-        }).catch(err => {
+        })
+        .catch((err) => {
           console.error(err)
         })
     }
@@ -56,6 +60,4 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+<style></style>
