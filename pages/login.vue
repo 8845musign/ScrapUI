@@ -1,12 +1,13 @@
 <template>
-  <main>
+  <header>
     <button v-if="!isAuthenticated" @click="signInGoogle">
       Google SignIn
     </button>
     <button v-if="isAuthenticated" @click="signOutGoogle">
       Google SignOut
     </button>
-  </main>
+  </header>
+  <!-- <main></main> -->
 </template>
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
