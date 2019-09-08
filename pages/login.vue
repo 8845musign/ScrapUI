@@ -1,23 +1,34 @@
 <template>
-  <header>
-    <button v-if="!isAuthenticated" @click="signInGoogle">
-      Google SignIn
-    </button>
-    <button v-if="isAuthenticated" @click="signOutGoogle">
-      Google SignOut
-    </button>
-  </header>
-  <!-- <main></main> -->
+  <div>
+    <header>
+      <button v-if="!isAuthenticated" @click="signInGoogle">
+        Google SignIn
+      </button>
+      <button v-if="isAuthenticated" @click="signOutGoogle">
+        Google SignOut
+      </button>
+    </header>
+    <main>
+      <h1>画像アップロード</h1>
+
+      <form>
+        <input
+          type="file"
+          @change="selectImageChanged($event.target.files[0])"
+        />
+        <button type="sumit">アップロード</button>
+      </form>
+    </main>
+  </div>
 </template>
-<script>
+<script lang="ts">
 import { mapActions, mapState, mapGetters } from 'vuex'
 import firebase from '~/plugins/firebase.ts'
 
 export default {
   data() {
     return {
-      email: '',
-      password: ''
+      file: File
     }
   },
   computed: {
@@ -63,6 +74,12 @@ export default {
     signInGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider()
       firebase.auth().signInWithRedirect(provider)
+    },
+    selectImageChanged(file: File) {
+      if (file.name && file.name !== '') {
+        this.file = file
+        console.log(file)
+      }
     }
   }
 }
