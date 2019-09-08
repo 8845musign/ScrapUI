@@ -1,17 +1,11 @@
 <template>
   <main>
-    <div v-if="false">
-      {{ user.email }}
-      <button @click="logout">ログアウト</button>
-    </div>
-    <div v-else>
-      <form @submit.prevent="login">
-        <input v-model="email" type="text" placeholder="email" />
-        <input v-model="password" type="text" placeholder="password" />
-
-        <button>ログイン</button>
-      </form>
-    </div>
+    <button v-if="!isAuthenticated" @click="signInGoogle">
+      Google SignIn
+    </button>
+    <button v-if="isAuthenticated" @click="signOutGoogle">
+      Google SignOut
+    </button>
   </main>
 </template>
 <script>
@@ -31,8 +25,17 @@ export default {
   },
   mounted() {
     firebase.auth().onAuthStateChanged((user) => {
-      this.setUser(user)
+      console.log(user)
+
+      if (user) {
+        this.setUser(user)
+      } else {
+        this.setUser(null)
+      }
     })
+    // firebase.auth().onAuthStateChanged((user) => {
+    //   this.setUser(user)
+    // })
   },
   methods: {
     ...mapActions('auth', ['setUser']),
@@ -45,7 +48,7 @@ export default {
           console.error(err)
         })
     },
-    logout() {
+    signOutGoogle() {
       firebase
         .auth()
         .signOut()
@@ -55,6 +58,10 @@ export default {
         .catch((err) => {
           console.error(err)
         })
+    },
+    signInGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider()
+      firebase.auth().signInWithRedirect(provider)
     }
   }
 }
